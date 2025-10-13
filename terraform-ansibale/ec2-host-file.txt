@@ -1,0 +1,58 @@
+#change key name & ip address for connect server
+ssh -i "terra-ansibale-key.pem" ubuntu@ec2-34-219-240-117.us-west-2.compute.amazonaws.com
+
+# install ansible code
+ sudo apt update
+ sudo apt install software-properties-common
+ sudo add-apt-repository --yes --update ppa:ansible/ansible
+ sudo apt install ansible
+
+sudo chmod 666 /etc/ansible/hosts # host read,write permision
+vim /etc/ansible/hosts
+
+#past this command
+
+[joonon_servers]
+server1 ansible_host=35.93.182.251 ansible_user=ubuntu #change ip
+server2 ansible_host=44.243.209.149 ansible_user=ec2-user #change ip
+server3 ansible_host=34.217.43.38 ansible_user=ec2-user #change ip
+
+[joonon_servers:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_ssh_private_key_file=/home/ubuntu/keys/terra-ansibale-key.pem
+
+mkdir keys
+cd keys
+vim terra-ansibale-key.pem
+ past private-key
+ 
+
+ansible-inventory --list
+sudo chmod 400 terra-ansibale-key.pem
+ansible joonon_servers -m ping # change server name (joonon_servers)
+
+ansible server3 -a "free -h"
+ansible joonon_servers -a "free -h"
+ansible joonon_servers -a "df -h"
+
+
+
+ansible server1 -a "sudo apt-get update"
+ansible server1 -a "sudo apt-get install nginx -y"
+ansible server1 -a "sudo systemctl start nginx"
+ansible server1 -a "sudo systemctl enable nginx"
+ansible server1 -a "systemctl status nginx"
+
+ansible server2 -a "sudo dnf upgrade -y"
+ansible server2 -a "sudo dnf install httpd -y"
+ansible server2 -a "sudo systemctl start httpd"
+ansible server2 -a "sudo systemctl enable httpd"
+ansible server2 -a "systemctl status httpd"
+
+ansible server3 -a "sudo dnf upgrade -y"
+ansible server3 -a "sudo dnf install httpd -y"
+ansible server3 -a "sudo systemctl start httpd"
+ansible server3 -a "sudo systemctl enable httpd"
+ansible server3 -a "systemctl status httpd"
+
+
