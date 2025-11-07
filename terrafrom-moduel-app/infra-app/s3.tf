@@ -10,3 +10,4 @@ resource "aws_s3_bucket" "infra_bucket" {
     Environment = var.env
   }
 }
+#call
